@@ -15,7 +15,7 @@ RUN apt-get update &&  apt-get install -y \
 #move cron
 #RUN mv /workdir/classifier/crontab /etc/cron.d/cron_file
 #RUN chmod 0644 /etc/cron.d/cron_file &&\
-    crontab /etc/cron.d/cron_file
+#    crontab /etc/cron.d/cron_file
 
 #Install sql server odbc driver 17
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
