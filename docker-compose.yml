@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  data_preparation:
+    image: warranty/data_preparation:1.1
+    container_name: warranty_data_prep 
+    environment:
+      R_CONFIG_ACTIVE: production
+    volumes:
+      - type: bind
+        source: /var/log/warranty
+        target: /workdir/logs
+    #networks:
+    #  - air_default
+  classifier:
+    image: warranty/classifier:1.0
+    container_name: warranty_classifier
+    environment:
+      R_CONFIG_ACTIVE: production
+    volumes:
+      - type: bind
+        source: /var/log/warranty
+        target: /workdir/logs
+

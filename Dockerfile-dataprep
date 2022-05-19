@@ -1,0 +1,29 @@
+FROM rocker/r-ver:4.0.3
+
+#COPY . /workdir 
+#WORKDIR /workdir/data_preparation
+
+RUN apt-get update &&  apt-get install -y \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    curl \
+    gpg-agent  \
+    cron
+
+#move cron
+#RUN mv /workdir/data_preparation/crontab /etc/cron.d/cron_file
+#RUN chmod 0644 /etc/cron.d/cron_file &&\
+    crontab /etc/cron.d/cron_file
+
+#Install sql server odbc driver 17
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN apt-get update
+RUN ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools unixodbc-dev
+
+
+# Install R packages (odbc R package must be installed AFTER installing ODBC in the OS)
+RUN Rscript -e "install.packages(c('dplyr', 'readxl', 'stringr','stringi', 'RODBC', 'httr', 'uuid', 'jsonlite', 'config'))"
+
+#ENTRYPOINT Rscript data_preparation.R
+#ENTRYPOINT ["cron", "-f"]
